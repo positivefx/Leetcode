@@ -4,18 +4,16 @@
  */
 var addDigits = function(num) {
     
-    const helperAdd = (number) => {
-        if (number < 10) {
-            return number;
-        } else {
-            let sum = 0;
-            let toArr = number.toString().split('');
-            for (let i = 0; i < toArr.length; i++) {
-                sum += Number(toArr[i]);
-            }
-            return helperAdd(sum)
+    if (num < 10) {
+        return num;
+    } else {
+        let sum = 0; 
+        let toArr = num.toString().split('');
+        
+        for (let i = 0; i < toArr.length; i++) {
+            sum += Number(toArr[i]);
         }
+        return addDigits(sum);
     }
-   return helperAdd(num)
 
 };
