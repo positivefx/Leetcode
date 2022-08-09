@@ -12,35 +12,45 @@
  */
 
 
-
-
 var cloneGraph = function(node) {
     
     const copied = {};
     
-    const dfs= (node) => {
-        if (!node) {
-            return node;
-        }
+    const bfs = (level) => {
+
+        const nextLevel = [];
         
-        if (copied[node.val]) {
-            return copied[node.val]
-        }
-        
-        const clonedNode = new Node(node.val);
-        
-        copied[node.val] = clonedNode;
-        
-        node.neighbors.map((eachNeighbor) => {
-            clonedNode.neighbors.push(dfs(eachNeighbor));
+        level.map((eachNode) => {
             
+            if (!eachNode) {
+                return eachNode;
+            }
+            
+            if (!copied[eachNode.val]) {
+                copied[eachNode.val] = new Node(eachNode.val);
+            } 
+            
+            nextLevel.push(...eachNode.neighbors.filter((eachNeighbor) => {
+                
+                if (!copied[eachNeighbor.val]) {
+                    copied[eachNeighbor.val] = new Node(eachNeighbor.val);
+                    copied[eachNode.val].neighbors.push(copied[eachNeighbor.val]);
+                    return true;
+                }
+                copied[eachNode.val].neighbors.push(copied[eachNeighbor.val])
+                return false;
+            }))
+     
         })
         
-        return clonedNode;
+        if (nextLevel.length) {
+            bfs(nextLevel);
+        }  
     }
     
+    bfs([node]);
     
-    return dfs(node);
+    return copied[1];
 };
 
 
